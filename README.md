@@ -42,4 +42,24 @@
   ```
   E = -q * pot.el
   ```
-- 
+- Jak przybliżyć pochodną?
+    ```
+    Metoda różnic skończonych:
+    druga pochodna z pot.el będzie obliczona jako:
+    delta^2 pot.el/ delta x^2 = ( pot.el|i-1 + 2*pot.el|i + pot.el|i+1 ) / h^2
+  
+    Należy to wyznaczyć dla każdego węzła/kroku obliczeniowego/struktury.
+    ```
+- Macierzowe wyznaczenie pot.el
+  ```
+  laplasjan(pot.el) = -q/e (p - n + Nd -Na)
+   
+  z tego wychodzi nam macierz w pewnym sensie:
+  
+  [macierz współczynników, 2 wymiary]*[macierz pot. el, wektor] = [p(pot.el),wektor] 
+  
+  do macierzy wspólczynnikow itp wstawiamy na poczatek i koniec warunki brzegowe
+  
+  a więc wyznaczenie rozkladu bedzie rozwiazaniem macierzy 
+  a dla 2 bramkowego tranzystora jedynym co sie zmienia są warunki brzegowe(??MAM NADZIEJE??)
+  ```
