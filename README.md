@@ -6,11 +6,11 @@
 - stały krok obliczeniowy
 - bez równań transportu 
 - jako, że tranzystor jest symetryczny można do obliczeń wziąć tylko połowę tranzystora
-- warunki brzegowe Dirichletta/Neumanna
+- warunki brzegowe Dirichletta/Neumanna ????
      ```
      f'(x) = 0 
      ```
-- w środku struktury mamy max czegoś więc również
+- w środku struktury mamy max czegoś więc również ????
     ```
     f'(pot.el) = 0
     ```
@@ -63,3 +63,41 @@
   a więc wyznaczenie rozkladu bedzie rozwiazaniem macierzy 
   a dla 2 bramkowego tranzystora jedynym co sie zmienia są warunki brzegowe(??MAM NADZIEJE??)
   ```
+### Plan obliczeń
+```
+                            laplasjan(pot.el) -q/e( p - n + Nd - Na)         (1)
+    
+    3 niewiadome: pot.el, p i n
+
+    Wzory na koncentracje:
+                            n = ni * exp((pot.el - pot.Fermiego)/(kb*T/q))   (2)
+                            p = ni * exp((pot.Fermiego - pot.el)/(kb*T/q))   (3)
+    
+    Bonus niewiadoma: pot.Fermiego..  Ef = -q * Vg ???
+
+    Mamy więc 3 niewiadome oraz 3 równania:
+    Możemy złożyć je w jedno:
+
+                    laplasjan(pot.el) = -q/e * ((ni * exp((pot.Fermiego - pot.el)/(kb*T/q)) - 
+                                        ni * exp((pot.el - pot.Fermiego)/(kb*T/q))) + Nd - Na)   (4)
+
+    aby wyznaczyć to równanie możnaby przenieść wszystko
+    na lewą stronę równania a następnie wyznaczyć miejsce zerowe funkcji.
+
+    Jednakże zrobione zostanie to inaczej:
+    lapsajan będący drugą pochodną pot.el po x wyznaczymy metodą różnic skończonych.
+            
+            laplasjan(pot.el) = (pot.el|i-1 + 2*pot.el|i + pot.el|i+1 ) / h^2           (5)
+
+    czyli potencjal w punkcie x => pot.el(x|i) wyznaczamy na podstawie dwóch sąsiednich kroków.
+
+    Następnie zapiszemy równanie Poissona dla pot.el w formie macierzowej:
+                                            Ax = B
+    gdzie: 
+    x to pot.el dla struktury podzielonej przez siatkę ze stałem krokiem obliczeń.
+    A - macierz współczynników po prawej stronie w liczniku wzoru (5).
+    B - jest prawą stroną wzoru (4).
+
+    Uzywając Metody Newtona-Rhapsona będziemy chceli wyznaczyć coś ???
+
+```
