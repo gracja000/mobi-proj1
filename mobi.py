@@ -23,27 +23,45 @@ phi_T = k*T/q# %[V] potencjał termiczny
 
 #Parametry symulacji
 Nx=100 #liczba wezłow siatki
+h = t_Si/Nx
 eps_aim =10**-15
 
-M = sp.diags([1, -2, 1], [-1, 0, 1], shape=(Nx,Nx),dtype=int).toarray()
-M[0,0] =1; M[0,1] =0
-M[Nx-1,Nx-1] =1; M[Nx-1,Nx-2] =0
+#równanie poissona
+n = lambda psi: n_i*np.exp((psi)/phi_T)
+p = lambda psi: n_i*np.exp((-psi)/phi_T)
 
-psi = np.linspace(V_g,V_g,Nx)
+poisson = lambda psi: (-h**2*q/eps_Si)*(p(psi)-n(psi)+N_a)
+poisson_div = lambda psi: (-h**2*q/eps_Si/phi_T)*(-p(psi)-n(psi))
 
-print(psi)
-print(M)
 
-#iteracyjna metoda Newtona
+
+M = sp.diags([1, -2, 1], [-1, 0, 1], shape=(Nx,Nx)).toarray()
+M[0,0] = 1 + (eps_Si*t_Ox/(eps_Ox*h))
+M[0,1] = -(eps_Si*t_Ox/(eps_Ox*h))
+M[Nx-1,Nx-1] =-1; M[Nx-1,Nx-2] =1
+
+psi = np.linspace(V_g,0,Nx)
 
 steps_c = 0
-#while(eps > eps_aim)
-#    steps_c +=1
-#    print(steps_c)
+while(eps > eps_aim):
+
+    L = M-np.diag(poisson_div(psi))
+    P = poisson(psi)-poisson_div(psi)*psi
+
+    P[0] = V_g;
+    P[-1] = 0;
+
+    #Obliczenia
+    psi_prev = psi
+    psi= np.linalg.solve(L,P)
+
+    steps_c +=1
+    print(steps_c)
+
+    eps = np.abs(np.max(psi_prev-psi));
+    print(eps)
+
+
 
 print(steps_c)
-
-
-#laplasjan(pot.el) -q/e( p - n + Nd - Na)
-#n = ni * exp((pot.el - pot.Fermiego)/phi_T)
-#p = ni * exp((pot.Fermiego - pot.el)/phi_T)
+print(psi)
