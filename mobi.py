@@ -37,10 +37,7 @@ def p(psi_vec):
 # Dzięki nim możemy przedstawić równanie Poissona jako równanie z jedną zmienną.
 def poisson(psi_vec):
     return (-h ** 2 * q / eps_si) * (p(psi_vec) - n(psi_vec) + Na)
-<<<<<<< HEAD
 # Pochodna pierwszego rzędu prawej strony Równania Poissona
-=======
->>>>>>> 41fd3b7221b35223d2c0492385b08bc4165eef01
 def poisson_I(psi_vec):
     return (-h ** 2 * q / eps_si / phi_T) * (-p(psi_vec) - n(psi_vec))
 
