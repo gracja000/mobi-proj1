@@ -1,6 +1,17 @@
-### MOBI Projekt Mikro 2 bramkowy tranzystor
+# Projekt MOBI Mikroelektronika 2019/20
 
-**Cel:** Wyznaczyć z równania Poissona rozkład potencjału elektrostatycznego w dwubramkowym tranzystorze
+### Cel projektu:
+
+W dwubramkowym krzemowym tranzystorze MOS należy wykreślić rozkład potencjału elektrostatycznego.
+
+Do tego potrzebne jest skonstruowanie opisu jednowymiarowego tej struktury w przekroju y.
+Do zadania przedstawiony został rysunek tranzystora i struktury pasmowe na Rys.2 wziętym wprost z instrukcji do projektu.
+
+![alt text](https://github.com/gracja000/mobi-proj1/blob/master/Struktura.png)
+
+Opis struktury należy stworzyć używając Metody Różnic Skończonych oraz algorytmu Newtona.
+Rozkład potencjału zostanie wyznaczony dla zadanego napięcia bramki Vg równego 0.8V.
+
 
 **Założenia:**
 - stały krok obliczeniowy
@@ -115,12 +126,12 @@
 ```
 - Wartości początkowe w węzłach zostały wybrane jako liniowo opadające od Vg do 0
 
-## Miara pozwalająca oszacować na bieżąco odległość rozwiązania w danej iteracji od rozwiązania “dokładnego”
-```
+#### Miara pozwalająca oszacować na bieżąco odległość rozwiązania w danej iteracji od rozwiązania “dokładnego”
+
 Jako miarę przyjęto wartość bezwzględną maksymalnej różnicy po wartościach potencjału wyznaczonych w poprzedniej iteracji i iteracji aktualnej. Jeżeli wynik jest mniejszy lub równy dokładności zadanej algorytmu Newtona to posiadamy wynik “dokładny”.
 
 Wartość maksymalna została wzięta w tym przypadku ponieważ wynik ma być “dokładny” dla każdego węzła struktury.
-```
+
 ### Wyniki:
 
 ![alt text](https://github.com/gracja000/mobi-proj1/blob/master/Wyniki/figure_1.png)
