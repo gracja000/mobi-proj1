@@ -61,6 +61,8 @@ coeff_arr[Nx - 1, Nx - 2] = 1
 # Maksimum pot.el będzie przy tlenku bramki a w środku struktury będzie minimum pot.el
 # Maksimum jest napięcie bramki V_g.
 psi = np.linspace(Vg, 0, Nx)
+psi_O = np.linspace(0, 0, Nx)
+psi_Vg = np.linspace(Vg, Vg, Nx)
 
 # Pomocnicze listy do przechowywania wartości błędu i pot.el w kolejnych iteracjach
 eps_per_iter = []
@@ -80,13 +82,7 @@ while eps > eps_aim:
     psi_prev_iter = psi
     psi = np.linalg.solve(L, R)
 
-<<<<<<< HEAD
     psi_flipped = np.flip(psi, axis=0)
-=======
-    # Skorzystanie z symetryczności struktury
-    # 2 bramkowego tranzsytora i zachowanie kolejnych wartości wektora pot.el
-    psi_flipped = np.flip(psi)
->>>>>>> c5b460bbbc861c7450bf3027ace35928bb15a457
     psi_concat = np.concatenate((psi, psi_flipped))
     psi_per_iter.append(psi_concat)
 
@@ -97,25 +93,22 @@ while eps > eps_aim:
 # Wykreślenie potencjału elektrostatycznego w funkcji y
 # Dla kilku iteracjii
 plt.figure(1)
-<<<<<<< HEAD
-for i in np.arange(0,steps_c, 2):
-    plt.plot(psiiter[i])
+for i in np.arange(0,int(steps_c/2), 2):
+    plt.plot(psi_per_iter[i], label="iteracja "+str(i))
+
+plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
+           ncol=4, mode="expand", borderaxespad=1.5)
+
+plt.title('Potencjał elektrostatyczy w funkcji y')
 plt.xlabel('y [nm]')
 plt.ylabel('rozkład   potencjału  ψ [V]')
 
-=======
-for i in np.arange(0, steps_c, 2):
-    plt.plot(psi_per_iter[i])
->>>>>>> c5b460bbbc861c7450bf3027ace35928bb15a457
 
 # Wykreślenie błędu w kolejnych iteracjach
 plt.figure(2)
-<<<<<<< HEAD
-plt.semilogy(epsperiter)
-plt.xlabel('liczba iteracji')
-plt.ylabel('Miara błedu')
-
-=======
 plt.semilogy(eps_per_iter)
->>>>>>> c5b460bbbc861c7450bf3027ace35928bb15a457
+plt.title('Błąd w kolejnych iteracjach')
+plt.xlabel('liczba iteracji')
+plt.ylabel('Miara błędu')
+
 plt.show()
