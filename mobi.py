@@ -22,7 +22,7 @@ T = 300# %[K] Temperatura
 phi_T = k*T/q# %[V] potencjał termiczny
 
 #Parametry symulacji
-Nx=500 #liczba wezłow siatki
+Nx = 500 #liczba wezłow siatki
 h = t_Si/Nx
 eps_aim =5 * 10**-15
 
@@ -38,9 +38,10 @@ M[0,0] = 1 + (eps_Si*t_Ox/(eps_Ox*h))
 M[0,1] = -(eps_Si*t_Ox/(eps_Ox*h))
 M[Nx-1,Nx-1] =-1; M[Nx-1,Nx-2] =1
 
-psi = np.linspace(V_g,0,Nx)
+psi = np.linspace(0.8,0,Nx)
 
 epsperiter = []
+psiiter = []
 
 steps_c = 0
 while(eps > eps_aim):
@@ -55,23 +56,29 @@ while(eps > eps_aim):
     psi_prev = psi
     psi= np.linalg.solve(L,P)
 
-    steps_c +=1
+    psi_flipped = np.flip(psi)
+    psi_concat = np.concatenate((psi, psi_flipped))
+    psiiter.append(psi_concat)
+
+    steps_c += 1
     print(steps_c)
 
     eps = np.abs(np.max(psi_prev-psi));
-
     epsperiter.append(eps)
-
     print(eps)
 
+# print(steps_c)
+# print(psi)
+# psi_flipped = np.flip(psi)
+# psi_concat = np.concatenate((psi, psi_flipped))
+# print(psi_concat)
 
 
-print(steps_c)
-print(psi)
-psi_flipped = np.flip(psi)
-psi_concat = np.concatenate((psi, psi_flipped))
-print(psi_concat)
+plt.figure(1)
+for i in np.arange(0,steps_c, 2):
+    plt.plot(psiiter[i])
 
 
+plt.figure(2)
 plt.semilogy(epsperiter)
 plt.show()
