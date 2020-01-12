@@ -56,7 +56,7 @@ while(eps > eps_aim):
     psi_prev = psi
     psi= np.linalg.solve(L,P)
 
-    psi_flipped = np.flip(psi)
+    psi_flipped = np.flip(psi, axis=0)
     psi_concat = np.concatenate((psi, psi_flipped))
     psiiter.append(psi_concat)
 
@@ -77,8 +77,13 @@ while(eps > eps_aim):
 plt.figure(1)
 for i in np.arange(0,steps_c, 2):
     plt.plot(psiiter[i])
+plt.xlabel('y [nm]')
+plt.ylabel('rozkład   potencjału  ψ [V]')
 
 
 plt.figure(2)
 plt.semilogy(epsperiter)
+plt.xlabel('liczba iteracji')
+plt.ylabel('Miara błedu')
+
 plt.show()
