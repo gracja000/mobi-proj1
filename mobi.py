@@ -22,9 +22,18 @@ phi_T = k*T/q# %[V] potencjał termiczny
 
 #Parametry symulacji
 Nx=100 #liczba wezłow siatki
+eps_aim =10**-15
 
 M = sp.diags([1, -2, 1], [-1, 0, 1], shape=(Nx,Nx),dtype=int).toarray()
 print(M)
+
+#iteracyjna metoda Newtona
+
+steps_c = 0
+while(eps > eps_aim)
+    steps_c +=1
+
+print(steps_c)
 
 
 #laplasjan(pot.el) -q/e( p - n + Nd - Na)
