@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.sparse as sp
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 # Parametry struktury
 N_a = 2*10**18 #[cm**-3] koncenatracja domieszki akceptorowej
@@ -22,9 +22,9 @@ T = 300# %[K] Temperatura
 phi_T = k*T/q# %[V] potencjał termiczny
 
 #Parametry symulacji
-Nx=100 #liczba wezłow siatki
+Nx=500 #liczba wezłow siatki
 h = t_Si/Nx
-eps_aim =10**-15
+eps_aim =5 * 10**-15
 
 #równanie poissona
 n = lambda psi: n_i*np.exp((psi)/phi_T)
@@ -33,14 +33,14 @@ p = lambda psi: n_i*np.exp((-psi)/phi_T)
 poisson = lambda psi: (-h**2*q/eps_Si)*(p(psi)-n(psi)+N_a)
 poisson_div = lambda psi: (-h**2*q/eps_Si/phi_T)*(-p(psi)-n(psi))
 
-
-
 M = sp.diags([1, -2, 1], [-1, 0, 1], shape=(Nx,Nx)).toarray()
 M[0,0] = 1 + (eps_Si*t_Ox/(eps_Ox*h))
 M[0,1] = -(eps_Si*t_Ox/(eps_Ox*h))
 M[Nx-1,Nx-1] =-1; M[Nx-1,Nx-2] =1
 
 psi = np.linspace(V_g,0,Nx)
+
+epsperiter = []
 
 steps_c = 0
 while(eps > eps_aim):
@@ -59,9 +59,19 @@ while(eps > eps_aim):
     print(steps_c)
 
     eps = np.abs(np.max(psi_prev-psi));
+
+    epsperiter.append(eps)
+
     print(eps)
 
 
 
 print(steps_c)
 print(psi)
+psi_flipped = np.flip(psi)
+psi_concat = np.concatenate((psi, psi_flipped))
+print(psi_concat)
+
+
+plt.semilogy(epsperiter)
+plt.show()
