@@ -102,18 +102,18 @@
 
 ```
 ### Założenia Symulacji
--Liczba węzłów siatki Nx = 500.
--Stały krok obliczeniowy w algorytmie Newtona.
--Krok algorytmu Newtona h =tsi/Nx.
--Dokładność wyniku, do którego zbiega algorytm Newtona eps_aim = 5 * 10^-15.
--Jako, że struktura jest symetryczna w symulacji liczymy wartości tylko dla połowy tranzystora, które do wykresów zostaną zwierciadlanie odbite.
--Opis struktury nie uwzględnia równań transportu
--Warunki brzegowe struktury są wyrażone poprzez:
+- Liczba węzłów siatki Nx = 500.
+- Stały krok obliczeniowy w algorytmie Newtona.
+- Krok algorytmu Newtona h =tsi/Nx.
+- Dokładność wyniku, do którego zbiega algorytm Newtona eps_aim = 5 * 10^-15.
+- Jako, że struktura jest symetryczna w symulacji liczymy wartości tylko dla połowy tranzystora, które do wykresów zostaną zwierciadlanie odbite.
+- Opis struktury nie uwzględnia równań transportu
+- Warunki brzegowe struktury są wyrażone poprzez:
 ```
   f'(ψ)=0 - w środku struktury
   Vg=1(1+sitoxoxh) -2(sitoxoxh) - na granicy tlenku bramki oraz obszaru aktywnego ponieważ musimy zachować ciągłość potencjału elektrycznego
 ```
--Wartości początkowe w węzłach zostały wybrane jako liniowo opadające od Vg do 0
+- Wartości początkowe w węzłach zostały wybrane jako liniowo opadające od Vg do 0
 
 ## Miara pozwalająca oszacować na bieżąco odległość rozwiązania w danej iteracji od rozwiązania “dokładnego”
 ```
