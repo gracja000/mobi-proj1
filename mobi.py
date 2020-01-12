@@ -36,7 +36,7 @@ def p(psi_vec):
 
 # Dzięki nim możemy przedstawić równanie Poissona jako równanie z jedną zmienną.
 def poisson(psi_vec):
-    return (-h ** 2 * q / eps_si) * (p(psi) - n(psi) + Na)
+    return (-h ** 2 * q / eps_si) * (p(psi_vec) - n(psi_vec) + Na)
 def poisson_I(psi_vec):
     return (-h ** 2 * q / eps_si / phi_T) * (-p(psi_vec) - n(psi_vec))
 
@@ -61,40 +61,56 @@ coeff_arr[Nx - 1, Nx - 2] = 1
 # Maksimum pot.el będzie przy tlenku bramki a w środku struktury będzie minimum pot.el
 # Maksimum jest napięcie bramki V_g.
 psi = np.linspace(Vg, 0, Nx)
-psi_O = np.linspace(0, 0, Nx)
+psi_0 = np.linspace(0, 0, Nx)
 psi_Vg = np.linspace(Vg, Vg, Nx)
 
-# Pomocnicze listy do przechowywania wartości błędu i pot.el w kolejnych iteracjach
-eps_per_iter = []
-psi_per_iter = []
 
 # Metoda iteracyjna Newtona-Rhapsona
-steps_c = 0
-while eps > eps_aim:
-    L = coeff_arr - np.diag(poisson_I(psi))
-    R = poisson(psi) - poisson_I(psi) * psi
+class N_method:
+    def __init__(self, aprox_vector):
+        self.aprox_vector = aprox_vector
+        # Pomocnicze listy do przechowywania wartości błędu i pot.el w kolejnych iteracjach
+        self.eps_per_iter = []
+        self.psi_per_iter = []
+        self.eps = 1
+        self.steps_c = 0
 
-    # Warunki brzegowe dla prawej strony równania macierzowego
-    R[0] = Vg
-    R[-1] = 0
+    def run(self):
+        psi = self.aprox_vector
+        while self.eps > eps_aim:
+            L = coeff_arr - np.diag(poisson_I(psi))
+            R = poisson(psi) - poisson_I(psi) * psi
 
-    # Rozwiązanie liniowego równania macierzowego
-    psi_prev_iter = psi
-    psi = np.linalg.solve(L, R)
+            # Warunki brzegowe dla prawej strony równania macierzowego
+            R[0] = Vg
+            R[-1] = 0
 
-    psi_flipped = np.flip(psi, axis=0)
-    psi_concat = np.concatenate((psi, psi_flipped))
-    psi_per_iter.append(psi_concat)
+            # Rozwiązanie liniowego równania macierzowego
+            psi_prev_iter = psi
+            psi = np.linalg.solve(L, R)
 
-    eps = np.abs(np.max(psi_prev_iter - psi))
-    eps_per_iter.append(eps)
-    steps_c += 1
+            psi_flipped = np.flip(psi, axis=0)
+            psi_concat = np.concatenate((psi, psi_flipped))
+            self.psi_per_iter.append(psi_concat)
+
+            self.eps = np.abs(np.max(psi_prev_iter - psi))
+            self.eps_per_iter.append(self.eps)
+            self.steps_c += 1
+
+p1=N_method(aprox_vector=psi)
+p1.run()
+
+p_0=N_method(aprox_vector=psi_0)
+p_0.run()
+
+p_Vg=N_method(aprox_vector=psi_Vg)
+p_Vg.run()
 
 # Wykreślenie potencjału elektrostatycznego w funkcji y
 # Dla kilku iteracjii
 plt.figure(1)
-for i in np.arange(0,int(steps_c/2), 2):
-    plt.plot(psi_per_iter[i], label="iteracja "+str(i))
+for i in np.arange(0,int(p1.steps_c/2), 2):
+    plt.plot(p1.psi_per_iter[i], label="iteracja "+str(i+1))
 
 plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
            ncol=4, mode="expand", borderaxespad=1.5)
@@ -106,9 +122,14 @@ plt.ylabel('rozkład   potencjału  ψ [V]')
 
 # Wykreślenie błędu w kolejnych iteracjach
 plt.figure(2)
-plt.semilogy(eps_per_iter)
+plt.semilogy(p1.eps_per_iter, label = "wektror przybliżony wartościami liniowo zmiennymi w zakresie 0, Vg")
+plt.semilogy(p_0.eps_per_iter,label =  "wektror przybliżony wartością 0")
+plt.semilogy(p_Vg.eps_per_iter, label = "wektror przybliżony wartością Vg")
 plt.title('Błąd w kolejnych iteracjach')
 plt.xlabel('liczba iteracji')
 plt.ylabel('Miara błędu')
+
+plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
+           ncol=1, mode="expand", borderaxespad=1.5)
 
 plt.show()
