@@ -37,10 +37,7 @@ def p(psi_vec):
 # Dzięki nim możemy przedstawić równanie Poissona jako równanie z jedną zmienną.
 def poisson(psi_vec):
     return (-h ** 2 * q / eps_si) * (p(psi_vec) - n(psi_vec) + Na)
-<<<<<<< HEAD
 # Pochodna pierwszego rzędu prawej strony Równania Poissona
-=======
->>>>>>> moze tak?
 def poisson_I(psi_vec):
     return (-h ** 2 * q / eps_si / phi_T) * (-p(psi_vec) - n(psi_vec))
 
@@ -69,29 +66,6 @@ psi_0 = np.linspace(0, 0, Nx)
 psi_Vg = np.linspace(Vg, Vg, Nx)
 
 
-<<<<<<< HEAD
-# Algorytm iteracyjny Newtona
-steps_c = 0
-while eps > eps_aim:
-    L = coeff_arr - np.diag(poisson_I(psi))
-    R = poisson(psi) - poisson_I(psi) * psi
-
-    # Warunki brzegowe dla prawej strony równania macierzowego
-    R[0] = Vg
-    R[-1] = 0
-
-    # Rozwiązanie liniowego równania macierzowego
-    psi_prev_iter = psi
-    psi = np.linalg.solve(L, R)
-
-    psi_flipped = np.flip(psi, axis=0)
-    psi_concat = np.concatenate((psi, psi_flipped))
-    psi_per_iter.append(psi_concat)
-
-    eps = np.abs(np.max(psi_prev_iter - psi))
-    eps_per_iter.append(eps)
-    steps_c += 1
-=======
 # Metoda iteracyjna Newtona-Rhapsona
 class N_method:
     def __init__(self, aprox_vector):
@@ -132,18 +106,12 @@ p_0.run()
 
 p_Vg=N_method(aprox_vector=psi_Vg)
 p_Vg.run()
->>>>>>> moze tak?
 
 # Wykreślenie potencjału elektrostatycznego w funkcji y
 # Dla kilku iteracjii
 plt.figure(1)
-<<<<<<< HEAD
-for i in np.arange(0, int(steps_c/2), 2):
-    plt.plot(psi_per_iter[i], label="iteracja "+str(i))
-=======
 for i in np.arange(0,int(p1.steps_c/2), 2):
     plt.plot(p1.psi_per_iter[i], label="iteracja "+str(i+1))
->>>>>>> moze tak?
 
 plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
            ncol=4, mode="expand", borderaxespad=1.5)
