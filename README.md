@@ -1,6 +1,8 @@
 # Projekt MOBI Mikroelektronika 2019/20
 ## Rozkład potencjału w dwubramkowym tranzystorze
 
+### Wykonane przez: Mateusz Wąsowski, Adam Drawc
+
 ### Cel projektu:
 
 W dwubramkowym krzemowym tranzystorze MOS należy wykreślić rozkład potencjału elektrostatycznego.
