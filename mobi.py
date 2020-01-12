@@ -2,12 +2,12 @@ import numpy as np
 import scipy.sparse as sp
 import matplotlib.pyplot as plt
 
-# Parametry Struktury 1D, dwu bramkowego tranzystora
+# Parametry Struktury dwubramkowego tranzystora w 1D
 Vg = 0.8  # Napięcie bramki [V]
 Na = 2 * 10 ** 18  # Koncenatracja domieszki akceptorowej [cm^-3]
 ni = 1e10  # Koncentracja dziur/elektronów samoistnych [cm^-3]
-t_Ox = 1.3 * 10 ** -7  # Grubość tlenku bramki [m]
-t_Si = 16 / 2 * 10 ** -7  # Grubość krzemu [m]
+t_ox = 1.3 * 10 ** -7  # Grubość tlenku bramki [nm]
+t_si = 16 / 2 * 10 ** -7  # Grubość krzemu [nm]
 eps = 8.854187817 * 10 ** -14  # Przenikalność elektryczna w próżni [F/cm]
 eps_si = eps * 11.7  # Przenikalność elektryczna w krzemie [F/cm]
 eps_ox = eps * 3.9  # Przenikalność elektryczna w tlenku bramki [F/cm]
@@ -20,8 +20,8 @@ phi_T = kb * T / q  # % Potencjał termiczny [V]
 # W strukturze tranzystora została podzieloną siatką o stałej odległości między węzłami siatki.
 # Dla uproszczenia założono stały krok obliczeniowy.
 Nx = 500  # Liczba węzłow siatki
-h = t_Si / Nx  # Krok obliczoniowy
-eps_aim = 5 * 10 ** -15  # Dokładność obliczeń, do której będzie dążyć metoda Newtona-Rhapsona.
+h = t_si / Nx  # Krok obliczeniowy
+eps_aim = 5 * 10 ** -15  # Dokładność obliczeń, do której będzie dążyć algorytm Newtona.
 
 # Równanie Poissona
 # Należy wyliczyć div(grad(psi)) = -q/eps * ( p - n + Nd - Na)
@@ -36,7 +36,8 @@ def p(psi_vec):
 
 # Dzięki nim możemy przedstawić równanie Poissona jako równanie z jedną zmienną.
 def poisson(psi_vec):
-    return (-h ** 2 * q / eps_si) * (p(psi) - n(psi) + Na)
+    return (-h ** 2 * q / eps_si) * (p(psi_vec) - n(psi_vec) + Na)
+# Pochodna pierwszego rzędu prawej strony Równania Poissona
 def poisson_I(psi_vec):
     return (-h ** 2 * q / eps_si / phi_T) * (-p(psi_vec) - n(psi_vec))
 
@@ -50,8 +51,8 @@ def poisson_I(psi_vec):
 coeff_arr = sp.diags([1, -2, 1], [-1, 0, 1], shape=(Nx, Nx)).toarray()
 
 # Warunki brzegowe wynikające z ciągłości pot.el na granicy tlenku bramki i krzemu
-coeff_arr[0, 0] = 1 + (eps_si * t_Ox / (eps_ox * h))
-coeff_arr[0, 1] = -(eps_si * t_Ox / (eps_ox * h))
+coeff_arr[0, 0] = 1 + (eps_si * t_ox / (eps_ox * h))
+coeff_arr[0, 1] = -(eps_si * t_ox / (eps_ox * h))
 
 # Warunki brzegowe w środku struktury
 coeff_arr[Nx - 1, Nx - 1] = -1
@@ -59,7 +60,7 @@ coeff_arr[Nx - 1, Nx - 2] = 1
 
 # Wektor wartości początkowych, zostały wybrane eksperymentalnie z przybliżeniem zakładającym, że
 # Maksimum pot.el będzie przy tlenku bramki a w środku struktury będzie minimum pot.el
-# Maksimum jest napięcie bramki V_g.
+# Maksimum jest napięcie bramki Vg.
 psi = np.linspace(Vg, 0, Nx)
 psi_O = np.linspace(0, 0, Nx)
 psi_Vg = np.linspace(Vg, Vg, Nx)
@@ -68,7 +69,7 @@ psi_Vg = np.linspace(Vg, Vg, Nx)
 eps_per_iter = []
 psi_per_iter = []
 
-# Metoda iteracyjna Newtona-Rhapsona
+# Algorytm iteracyjny Newtona
 steps_c = 0
 while eps > eps_aim:
     L = coeff_arr - np.diag(poisson_I(psi))
@@ -93,7 +94,7 @@ while eps > eps_aim:
 # Wykreślenie potencjału elektrostatycznego w funkcji y
 # Dla kilku iteracjii
 plt.figure(1)
-for i in np.arange(0,int(steps_c/2), 2):
+for i in np.arange(0, int(steps_c/2), 2):
     plt.plot(psi_per_iter[i], label="iteracja "+str(i))
 
 plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
