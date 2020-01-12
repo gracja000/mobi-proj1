@@ -101,7 +101,7 @@
     Uzywając Metody Newtona-Rhapsona będziemy chceli wyznaczyć coś ???
 
 ```
-###Założenia Symulacji
+### Założenia Symulacji
 -Liczba węzłów siatki Nx = 500.
 -Stały krok obliczeniowy w algorytmie Newtona.
 -Krok algorytmu Newtona h =tsi/Nx.
@@ -115,13 +115,13 @@
 ```
 -Wartości początkowe w węzłach zostały wybrane jako liniowo opadające od Vg do 0
 
-##Miara pozwalająca oszacować na bieżąco odległość rozwiązania w danej iteracji od rozwiązania “dokładnego”
+## Miara pozwalająca oszacować na bieżąco odległość rozwiązania w danej iteracji od rozwiązania “dokładnego”
 ```
 Jako miarę przyjęto wartość bezwzględną maksymalnej różnicy po wartościach potencjału wyznaczonych w poprzedniej iteracji i iteracji aktualnej. Jeżeli wynik jest mniejszy lub równy dokładności zadanej algorytmu Newtona to posiadamy wynik “dokładny”.
 
 Wartość maksymalna została wzięta w tym przypadku ponieważ wynik ma być “dokładny” dla każdego węzła struktury.
 ```
-###Wyniki:
+### Wyniki:
 
 ![alt text](https://github.com/gracja000/mobi-proj1/blob/master/Wyniki/figure_1.png)
 
