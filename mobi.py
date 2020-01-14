@@ -110,8 +110,9 @@ p_Vg.run()
 # Wykreślenie potencjału elektrostatycznego w funkcji y
 # Dla kilku iteracjii
 plt.figure(1)
+x = np.linspace(0, 16, 2*Nx)
 for i in np.arange(0,int(p1.steps_c/2), 2):
-    plt.plot(p1.psi_per_iter[i], label="iteracja "+str(i+1))
+    plt.plot(x,p1.psi_per_iter[i], label="iteracja "+str(i+1))
 
 plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
            ncol=4, mode="expand", borderaxespad=1.5)
