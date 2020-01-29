@@ -84,7 +84,6 @@ class N_method:
 
             # Warunki brzegowe dla prawej strony równania macierzowego
             R[0] = Vg
-            R[-1] = 0
 
             # Rozwiązanie liniowego równania macierzowego
             psi_prev_iter = psi
@@ -98,21 +97,22 @@ class N_method:
             self.eps_per_iter.append(self.eps)
             self.steps_c += 1
 
-p1=N_method(aprox_vector=psi)
+
+p1 = N_method(aprox_vector=psi)
 p1.run()
 
-p_0=N_method(aprox_vector=psi_0)
+p_0 = N_method(aprox_vector=psi_0)
 p_0.run()
 
-p_Vg=N_method(aprox_vector=psi_Vg)
+p_Vg = N_method(aprox_vector=psi_Vg)
 p_Vg.run()
 
 # Wykreślenie potencjału elektrostatycznego w funkcji y
 # Dla kilku iteracjii
 plt.figure(1)
 x = np.linspace(0, 16, 2*Nx)
-for i in np.arange(0,int(p1.steps_c/2), 2):
-    plt.plot(x,p1.psi_per_iter[i], label="iteracja "+str(i+1))
+for i in np.arange(0, int(p1.steps_c/2), 2):
+    plt.plot(x, p1.psi_per_iter[i], label="iteracja "+str(i+1))
 
 plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
            ncol=4, mode="expand", borderaxespad=1.5)
@@ -124,9 +124,9 @@ plt.ylabel('rozkład   potencjału  ψ [V]')
 
 # Wykreślenie błędu w kolejnych iteracjach
 plt.figure(2)
-plt.semilogy(p1.eps_per_iter, label = "wektror przybliżony wartościami liniowo zmiennymi w zakresie 0, Vg")
-plt.semilogy(p_0.eps_per_iter,label =  "wektror przybliżony wartością 0")
-plt.semilogy(p_Vg.eps_per_iter, label = "wektror przybliżony wartością Vg")
+plt.semilogy(p1.eps_per_iter, label="wektror przybliżony wartościami liniowo zmiennymi w zakresie 0, Vg")
+plt.semilogy(p_0.eps_per_iter, label="wektror przybliżony wartością 0")
+plt.semilogy(p_Vg.eps_per_iter, label="wektror przybliżony wartością Vg")
 plt.title('Błąd w kolejnych iteracjach')
 plt.xlabel('liczba iteracji')
 plt.ylabel('Miara błędu')
